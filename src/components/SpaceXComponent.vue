@@ -16,7 +16,10 @@
         <div class="header">
             <h2>Registros de lançamentos</h2>
             <div class="search-container">
-                <DataFilter></DataFilter>
+                <DataFilter
+                    :data="launches"
+                    @onHandleSearch="onHandleSearch($event)"
+                ></DataFilter>
             </div>
         </div>
     </div>
@@ -39,6 +42,29 @@ export default {
     },
     async mounted() {
         this.launches = await launchServices.getLaunches();
+    },
+    methods: {
+        async handleSearch(event) {
+            const searchTerm = event.toLowerCase();
+
+            if (searchTerm === '') {
+                this.launches = await launchServices.getLaunches();
+                
+                return;
+            }
+
+            const filteredLaunches = this.launches.filter((launch) => {
+                const { name, rocket, success } = launch;
+
+                return (
+                    name.toLowerCase().includes(searchTerm) ||
+                    rocket.toLowerCase().includes(searchTerm) ||
+                    success.toString().toLowerCase().includes(searchTerm)
+                );
+            });
+
+            this.products = (filteredLaunches.length === 0) ? [] : filteredLaunches;
+        }
     }
 
 }
