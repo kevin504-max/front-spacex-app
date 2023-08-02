@@ -10,20 +10,38 @@
             </div>
             <div class="chart">
                 <h2>Lançamentos por ano</h2>
-
+                
             </div>
         </div>
         <div class="header">
             <h2>Registros de lançamentos</h2>
-            
+            <div class="search-container">
+                <DataFilter></DataFilter>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'SpaceXComponent',
+import { launchServices } from '@/services/launchServices';
+import DataFilter from './DataFilter.vue';
+
+export default {
+    name: 'SpaceXComponent',
+    componentes: {
+        DataFilter,
+    },
+    data () {
+        return {
+            launches: [],
+            filteredLaunches: [],
+        };
+    },
+    async mounted() {
+        this.launches = await launchServices.getLaunches();
     }
+
+}
 </script>
 
 <style lang="scss" src="./style.scss" scoped></style>
