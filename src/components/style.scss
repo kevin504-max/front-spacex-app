@@ -61,5 +61,21 @@
         margin-top: 2rem;
     }
 
-    
+    .table-container {
+        width: 80%;
+        height: 100%;
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #6c757d;
+
+        .img-thumbnail {
+            width: 40%;
+            height: 40%;
+            border-radius: 50%;
+            margin: 0 auto;
+            object-fit: cover;
+        }
+    }
 }

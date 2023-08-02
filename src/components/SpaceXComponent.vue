@@ -23,36 +23,36 @@
             ></DataFilter>
         </div>
         <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>N° Vôo</th>
-                        <th>Logo</th>
-                        <th>Missão</th>
-                        <th>Data de lançamento</th>
-                        <th>Foguete</th>
-                        <th>Resultado</th>
-                        <th>Vídeo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="launch in launches" :key="launch.id">
-                        <td>{{ launch.flight_number }}</td>
-                        <td>
-                            <img :src="launch.links.patch.small" alt="Logo" />
-                        </td>
-                        <td>{{ launch.name }}</td>
-                        <td>{{ new Date(launch.launch_date_utc).toLocaleDateString('pt-BR') }}</td>
-                        <td>{{ launch.rocket }}</td>
-                        <td>{{ launch.success }}</td>
-                        <td>
-                            <a :href="`https://www.youtube.com/watch?v=${launch.links.youtube_id}`" target="_blank">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>N° Vôo</th>
+                <th>Logo</th>
+                <th>Missão</th>
+                <th>Data de lançamento</th>
+                <th>Foguete</th>
+                <th>Resultado</th>
+                <th>Vídeo</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="launch in launches" :key="launch.id">
+                <td class="align-middle" style="font-weight: bold;">{{ launch.flight_number }}</td>
+                <td class="align-middle" style="font-weight: bold;">
+                    <img :src="launch.links.patch.small" alt="Logo" class="img-thumbnail" />
+                </td>
+                <td class="align-middle" style="font-weight: bold;">{{ launch.name }}</td>
+                <td class="align-middle" style="font-weight: bold;">{{ new Date(launch.launch_date_utc).toLocaleDateString('pt-BR') }}</td>
+                <td class="align-middle" style="font-weight: bold;">{{ launch.rocket }}</td>
+                <td class="align-middle" style="font-weight: bold;">{{ launch.success ? 'Sucesso' : 'Falha' }}</td>
+                <td class="align-middle" style="font-weight: bold;">
+                <a :href="`https://www.youtube.com/watch?v=${launch.links.youtube_id}`" target="_blank">
+                    <i class="fab fa-youtube" style="color: #f00; font-size: 2.5rem;"></i>
+                </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
         </div>
     </div>
 </template>
