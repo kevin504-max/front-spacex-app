@@ -1,0 +1,56 @@
+.main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #343a40;
+
+    .header {
+        h1 {
+            color: #fff;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+    
+            .icon {
+                color: #a94c09;
+                margin-right: 0.4rem;
+            }
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+    }
+
+    .charts {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+
+        .chart {
+            width: 32%;
+            height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 2.5rem;
+            background-color: #6c757d;
+
+            h2 {
+                color: #111;
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            // .chart-container
+        }   
+    }
+
+    
+}
