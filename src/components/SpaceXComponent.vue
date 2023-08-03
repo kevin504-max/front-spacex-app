@@ -23,7 +23,7 @@
             ></DataFilter>
         </div>
         <div class="table-container">
-            <table class="table">
+            <table class="table table-secondary">
                 <thead>
                     <tr>
                         <th>N° Vôo</th>
@@ -38,12 +38,12 @@
                 <tbody>
                     <tr v-for="launch in launches.slice((currentPage - 1) * limit, currentPage * limit)" :key="launch.id">
                         <td class="align-middle" style="font-weight: bold;">{{ launch.flight_number }}</td>
-                        <td class="align-middle" style="font-weight: bold;">
+                        <td class="">
                             <img :src="launch.links.patch.small" alt="Logo" class="img-thumbnail" />
                         </td>
                         <td class="align-middle" style="font-weight: bold;">{{ launch.name }}</td>
-                        <td class="align-middle" style="font-weight: bold;">{{ new Date(launch.launch_date_utc).toLocaleDateString('pt-BR') }}</td>
-                        <td class="align-middle" style="font-weight: bold;">{{ launch.rocket }}</td>
+                        <td class="align-middle" style="font-weight: bold;">{{ new Date(launch.date_local).toLocaleDateString('pt-BR') }}</td>
+                        <td class="align-middle" style="font-weight: bold;">{{ launch.rocket_name }}</td>
                         <td class="align-middle" style="font-weight: bold;">{{ launch.success ? 'Sucesso' : 'Falha' }}</td>
                         <td class="align-middle" style="font-weight: bold;">
                             <a :href="`https://www.youtube.com/watch?v=${launch.links.youtube_id}`" target="_blank">
@@ -101,6 +101,15 @@ export default {
     },
     async mounted() {
         this.launches = await launchServices.getLaunches();
+
+        const rocketPromises = this.launches.map(async (launch) => {
+            const rocketName = await launchServices.getRocket(launch.rocket);
+            launch.rocket_name = rocketName;
+            
+            return launch;
+        });
+
+        await Promise.all(rocketPromises);
 
         this.totalPages = Math.ceil(this.launches.length / this.limit);
     },

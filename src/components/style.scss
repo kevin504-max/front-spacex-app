@@ -70,6 +70,10 @@
         align-items: center;
         background-color: #6c757d;
 
+        .table-secondary {
+            background-color: #6c757d;
+        }
+
         .img-thumbnail {
             width: 30%;
             height: 30%;
@@ -77,6 +81,11 @@
             border: none;
             margin: 0 auto;
             object-fit: cover;
+        }
+
+        .pagination {
+            margin-top: 2rem;
+
         }
     }
 }
