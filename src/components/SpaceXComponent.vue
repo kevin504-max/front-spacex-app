@@ -6,7 +6,15 @@
         <div class="charts">
             <div class="chart">
                 <h2>Lançamentos de foguetes</h2>
-                
+                <div class="chart-container">
+                    <vue-apex-charts type="pie" width="380" :options="chartOptions" :series="series"></vue-apex-charts>
+                </div>
+                <div class="stats">
+                    <h3>Resultados de lançamento:</h3>
+                    <p>Total: <span class="total">{{ launchesData.total }}</span></p>
+                    <p>Sucesso: <span class="success">{{ launchesData.success }}</span></p>
+                    <p>Falha: <span class="fail">{{ launchesData.failed }}</span></p>
+                </div>
             </div>
             <div class="chart">
                 <h2>Lançamentos por ano</h2>
@@ -44,7 +52,10 @@
                         <td class="" scope="col" style="font-weight: bold;">{{ launch.name }}</td>
                         <td class="" scope="col" style="font-weight: bold;">{{ new Date(launch.date_local).toLocaleDateString('pt-BR') }}</td>
                         <td class="" scope="col" style="font-weight: bold;">{{ launch.rocket_name }}</td>
-                        <td class="" scope="col" style="font-weight: bold;">{{ launch.success ? 'Sucesso' : 'Falha' }}</td>
+                        <td 
+                            :class="'mt-3 badge ' + (launch.success ? 'badge-success' : 'badge-danger')" 
+                            scope="col" style="font-weight: bold;"
+                        >{{ launch.success ? 'Sucesso' : 'Falha' }}</td>
                         <td class="" scope="col" style="font-weight: bold;">
                             <a :href="`https://www.youtube.com/watch?v=${launch.links.youtube_id}`" target="_blank">
                                 <i class="fab fa-youtube" style="color: #f00; font-size: 2.5rem;"></i>
@@ -68,18 +79,23 @@
 import { launchServices } from '@/services/launchServices';
 import DataFilter from './DataFilter.vue';
 import vPagination from 'vue-plain-pagination';
+import VueApexCharts from 'vue-apexcharts';
+import axios from 'axios'
 
 export default {
     name: 'SpaceXComponent',
     components: {
         DataFilter,
         vPagination,
+        VueApexCharts,
     },
     inject: ['makeSpin'],
     data () {
         return {
             launches: [],
             filteredLaunches: [],
+            launchesData: [],
+            launchesByYear: [],
             currentPage: 1,
             limit: 5,
             totalPages: 1,
@@ -96,7 +112,30 @@ export default {
                 prev: '<i class="fa fa-angle-left">',
                 next: '<i class="fa fa-angle-right">',
                 last: '<i class="fa fa-angles-right"></i>'
-            }
+            },
+            series: [],
+            chartOptions: {
+                chart: {
+                    width: 380,
+                    type: 'pie',
+                },
+                labels: [
+                    'Falcon 1',
+                    'Falcon 9',
+                    'Falcon Heavy',
+                ],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                            legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            },
         };
     },
     async mounted() {
@@ -115,6 +154,34 @@ export default {
 
         this.totalPages = Math.ceil(this.launches.length / this.limit);
 
+        var rockets = this.launches.reduce((acc, launch) => {
+            const rocket = acc.find((rocket) => rocket.name === launch.rocket_name);
+
+            if (rocket) {
+                rocket.data[0] += 1;
+            } else {
+                acc.push({
+                    name: launch.rocket_name,
+                    data: [1]
+                });
+            }
+
+            return acc;
+        }, []);
+
+        this.series = rockets.map((rocket) => {
+            return rocket.data[0];
+        });
+        
+        this.chartOptions.labels = rockets.map((rocket) => {
+            return rocket.name;
+        });
+
+        const response = await axios.get('/launches/stats');
+
+        this.launchesData = response.data.launchesData;
+        this.launchesByYear = response.data.launchesByYear;
+        
         this.makeSpin.value = false;
     },
     methods: {
