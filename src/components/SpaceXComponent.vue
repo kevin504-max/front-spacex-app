@@ -27,7 +27,7 @@
         <div class="search-container">
             <DataFilter
                 :data="launches"
-                @onHandleSearch="onHandleSearch($event)"
+                @onHandleSearch="handleSearch($event)"
             ></DataFilter>
         </div>
         <div class="table-container">
@@ -39,7 +39,12 @@
                         <th>Missão</th>
                         <th>Data de lançamento</th>
                         <th>Foguete</th>
-                        <th>Resultado</th>
+                        <th 
+                            @click="sortLaunches('success')" 
+                            style="cursor: pointer;"
+                        >
+                            Resultado <i :class="`fa fa-sort-${sortDirection === 'asc' ? 'up' : 'down'}`"></i>
+                        </th>
                         <th>Vídeo</th>
                     </tr>
                 </thead>
@@ -96,6 +101,8 @@ export default {
             filteredLaunches: [],
             launchesData: [],
             launchesByYear: [],
+            sortBy: '',
+            sortDirection: 'asc',
             currentPage: 1,
             limit: 5,
             totalPages: 1,
@@ -192,24 +199,48 @@ export default {
                 this.launches = await launchServices.getLaunches();
                 this.totalPages = Math.ceil(this.launches.length / this.limit);
                 this.currentPage = 1;
+                window.location.reload();
                 
                 return;
             }
 
             const filteredLaunches = this.launches.filter((launch) => {
-                const { name, rocket, success } = launch;
+                const { name, rocket_name } = launch;
 
                 return (
                     name.toLowerCase().includes(searchTerm) ||
-                    rocket.toLowerCase().includes(searchTerm) ||
-                    success.toString().toLowerCase().includes(searchTerm)
+                    rocket_name.toLowerCase().includes(searchTerm)
                 );
             });
 
             this.totalPages = Math.ceil(filteredLaunches.length / this.limit) || 1;
             this.currentPage = 1;
             this.launches = (filteredLaunches.length === 0) ? [] : filteredLaunches;
-        }
+        },
+
+        sortLaunches(field) {
+            if (this.sortBy === field) {
+                this.sortDirection = (this.sortDirection === 'asc') ? 'desc' : 'asc';
+            } else {
+                this.sortBy = field;
+                this.sortDirection = 'asc';
+            }
+
+            this.launches.sort((a, b) => {
+                const aValue = a[field];
+                const bValue = b[field];
+
+                if (aValue === bValue) {
+                    return 0;
+                }
+
+                if (this.sortDirection === 'asc') {
+                    return aValue < bValue ? -1 : 1;
+                } else {
+                    return aValue > bValue ? -1 : 1;
+                }
+            });
+        },
     }
 
 }

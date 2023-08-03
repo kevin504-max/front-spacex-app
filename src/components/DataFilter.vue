@@ -60,7 +60,7 @@
         background-position: 10px center;
         background-size: 30px;
 
-        &:focus {
+        &:focus, &:not(:placeholder-shown) {
             background-image: none;
         }
         
