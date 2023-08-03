@@ -1,5 +1,10 @@
 <template>
+    <div v-if="dataLoaded">
         <vue-apex-charts type="pie" width="380" :options="chartOptions" :series="series"></vue-apex-charts>
+    </div>
+    <div v-else>
+        <p>Carregando...</p>
+    </div>
 </template>
 
 <script>
@@ -43,30 +48,37 @@ export default {
             },
         };
     },
-    mounted() {
-        var rockets = this.launches.reduce((acc, launch) => {
-            const rocket = acc.find((rocket) => rocket.name === launch.rocket_name);
+    watch: {
+        launches: {
+            immediate: true,
+            handler(newLaunches) {
+                var rockets = newLaunches.reduce((acc, launch) => {
+                    const rocket = acc.find((rocket) => rocket.name === launch.rocket_name);
 
-            if (rocket) {
-                rocket.data[0] += 1;
-            } else {
-                acc.push({
-                    name: launch.rocket_name,
-                    data: [1]
+                    if (rocket) {
+                        rocket.data[0] += 1;
+                    } else {
+                        acc.push({
+                            name: launch.rocket_name,
+                            data: [1]
+                        });
+                    }
+
+                    return acc;
+                }, []);
+
+                this.series = rockets.map((rocket) => {
+                    return rocket.data[0];
                 });
-            }
 
-            return acc;
-        }, []);
+                this.chartOptions.labels = rockets.map((rocket) => {
+                    return rocket.name;
+                });
 
-        this.series = rockets.map((rocket) => {
-            return rocket.data[0];
-        });
-        
-        this.chartOptions.labels = rockets.map((rocket) => {
-            return rocket.name;
-        });
-    }
+                this.dataLoaded = true;
+            },
+        },
+    },
 }
 </script>
 

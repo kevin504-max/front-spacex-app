@@ -7,8 +7,7 @@
             <div class="chart">
                 <h2>Lançamentos de foguetes</h2>
                 <div class="chart-container">
-                    <!-- <vue-apex-charts type="pie" width="380" :options="chartOptions" :series="series"></vue-apex-charts> -->
-                    <PieChart :launches="launches"></PieChart>
+                    <PieChart v-if="dataLoaded" :launches="launches"></PieChart>
                 </div>
                 <div class="stats">
                     <h3>Resultados de lançamento:</h3>
@@ -85,7 +84,6 @@
 import { launchServices } from '@/services/launchServices';
 import DataFilter from './DataFilter.vue';
 import vPagination from 'vue-plain-pagination';
-// import VueApexCharts from 'vue-apexcharts';
 import PieChart from './PieChart.vue';
 import axios from 'axios'
 
@@ -95,7 +93,6 @@ export default {
         DataFilter,
         vPagination,
         PieChart,
-        // VueApexCharts,
     },
     inject: ['makeSpin'],
     data () {
@@ -123,29 +120,6 @@ export default {
                 next: '<i class="fa fa-angle-right">',
                 last: '<i class="fa fa-angles-right"></i>'
             },
-            // series: [],
-            // chartOptions: {
-            //     chart: {
-            //         width: 380,
-            //         type: 'pie',
-            //     },
-            //     labels: [
-            //         'Falcon 1',
-            //         'Falcon 9',
-            //         'Falcon Heavy',
-            //     ],
-            //     responsive: [{
-            //         breakpoint: 480,
-            //         options: {
-            //             chart: {
-            //                 width: 200
-            //             },
-            //                 legend: {
-            //                 position: 'bottom'
-            //             }
-            //         }
-            //     }]
-            // },
         };
     },
     async mounted() {
@@ -164,35 +138,16 @@ export default {
 
         this.totalPages = Math.ceil(this.launches.length / this.limit);
 
-        // var rockets = this.launches.reduce((acc, launch) => {
-        //     const rocket = acc.find((rocket) => rocket.name === launch.rocket_name);
-
-        //     if (rocket) {
-        //         rocket.data[0] += 1;
-        //     } else {
-        //         acc.push({
-        //             name: launch.rocket_name,
-        //             data: [1]
-        //         });
-        //     }
-
-        //     return acc;
-        // }, []);
-
-        // this.series = rockets.map((rocket) => {
-        //     return rocket.data[0];
-        // });
-        
-        // this.chartOptions.labels = rockets.map((rocket) => {
-        //     return rocket.name;
-        // });
-
         const response = await axios.get('/launches/stats');
 
         this.launchesData = response.data.launchesData;
         this.launchesByYear = response.data.launchesByYear;
         
         this.makeSpin.value = false;
+
+        this.dataLoaded = true;
+        
+        this.$emit('data-loaded', true);
     },
     methods: {
         async handleSearch(event) {
