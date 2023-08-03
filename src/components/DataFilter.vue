@@ -45,7 +45,7 @@
     
     .search-box {
         width: 50%;
-        height: 65%;
+        height: 5vh;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -75,7 +75,7 @@
 
     .search-button {
         width: 20%;
-        height: 65%;
+        height: 5vh;
         display: flex;
         justify-content: center;
         align-items: center;

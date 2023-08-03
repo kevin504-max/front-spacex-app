@@ -37,15 +37,15 @@
                 </thead>
                 <tbody>
                     <tr v-for="launch in launches.slice((currentPage - 1) * limit, currentPage * limit)" :key="launch.id">
-                        <td class="align-middle" style="font-weight: bold;">{{ launch.flight_number }}</td>
-                        <td class="">
+                        <td class="" scope="col" style="font-weight: bold;">{{ launch.flight_number }}</td>
+                        <td class="" width="10%">
                             <img :src="launch.links.patch.small" alt="Logo" class="img-thumbnail" />
                         </td>
-                        <td class="align-middle" style="font-weight: bold;">{{ launch.name }}</td>
-                        <td class="align-middle" style="font-weight: bold;">{{ new Date(launch.date_local).toLocaleDateString('pt-BR') }}</td>
-                        <td class="align-middle" style="font-weight: bold;">{{ launch.rocket_name }}</td>
-                        <td class="align-middle" style="font-weight: bold;">{{ launch.success ? 'Sucesso' : 'Falha' }}</td>
-                        <td class="align-middle" style="font-weight: bold;">
+                        <td class="" scope="col" style="font-weight: bold;">{{ launch.name }}</td>
+                        <td class="" scope="col" style="font-weight: bold;">{{ new Date(launch.date_local).toLocaleDateString('pt-BR') }}</td>
+                        <td class="" scope="col" style="font-weight: bold;">{{ launch.rocket_name }}</td>
+                        <td class="" scope="col" style="font-weight: bold;">{{ launch.success ? 'Sucesso' : 'Falha' }}</td>
+                        <td class="" scope="col" style="font-weight: bold;">
                             <a :href="`https://www.youtube.com/watch?v=${launch.links.youtube_id}`" target="_blank">
                                 <i class="fab fa-youtube" style="color: #f00; font-size: 2.5rem;"></i>
                             </a>
@@ -53,15 +53,14 @@
                     </tr>
                 </tbody>
             </table>
+            <v-pagination
+                v-model="currentPage"
+                :page-count="totalPages"
+                :classes="bootstrapPaginationClasses"
+                :labels="paginationAnchorTexts"
+                :limit="limit"
+            ></v-pagination>
         </div>
-        <v-pagination
-            v-model="currentPage"
-            :page-count="totalPages"
-            :classes="bootstrapPaginationClasses"
-            :labels="paginationAnchorTexts"
-            :limit="limit"
-            class="pagination"
-        ></v-pagination>
     </div>
 </template>
 
@@ -89,7 +88,7 @@ export default {
                 liActive: 'active',
                 liDisable: 'disabled',
                 button: 'page-link',
-                buttonDisable: 'disabled'
+                buttonDisable: 'disabled',
             },
             paginationAnchorTexts: {
                 first: '<i class="fa fa-angles-left"></i>',
