@@ -75,6 +75,7 @@ export default {
         DataFilter,
         vPagination,
     },
+    inject: ['makeSpin'],
     data () {
         return {
             launches: [],
@@ -99,6 +100,8 @@ export default {
         };
     },
     async mounted() {
+        this.makeSpin.value = true;
+
         this.launches = await launchServices.getLaunches();
 
         const rocketPromises = this.launches.map(async (launch) => {
@@ -111,6 +114,8 @@ export default {
         await Promise.all(rocketPromises);
 
         this.totalPages = Math.ceil(this.launches.length / this.limit);
+
+        this.makeSpin.value = false;
     },
     methods: {
         async handleSearch(event) {
