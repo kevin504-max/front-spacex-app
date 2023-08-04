@@ -18,7 +18,9 @@
             </div>
             <div class="chart">
                 <h2>Lançamentos por ano</h2>
-                
+                <div class="chart-container">
+                    <BarChart v-if="dataLoaded" :launchesByYear="launchesByYear" :launches="launches"></BarChart>
+                </div>
             </div>
         </div>
         <div class="header">
@@ -84,8 +86,9 @@
 import { launchServices } from '@/services/launchServices';
 import DataFilter from './DataFilter.vue';
 import vPagination from 'vue-plain-pagination';
-import PieChart from './PieChart.vue';
 import axios from 'axios'
+import PieChart from './PieChart.vue';
+import BarChart from './BarChart.vue';
 
 export default {
     name: 'SpaceXComponent',
@@ -93,6 +96,7 @@ export default {
         DataFilter,
         vPagination,
         PieChart,
+        BarChart,
     },
     inject: ['makeSpin'],
     data () {
@@ -141,8 +145,23 @@ export default {
         const response = await axios.get('/launches/stats');
 
         this.launchesData = response.data.launchesData;
-        this.launchesByYear = response.data.launchesByYear;
-        
+        this.launchesByYear = Object.entries(this.launchesByYear).map(([year, launches]) => {
+            return {
+                name: year,
+                data: [launches]
+            }
+        });
+
+        this.launchesByYear = this.launches.reduce((acc, launch) => {
+            const year = new Date(launch.date_local).getFullYear();
+            const yearLaunches = acc[year] || [];
+
+            yearLaunches.push(launch);
+            acc[year] = yearLaunches;
+
+            return acc;
+        }, {});            
+
         this.makeSpin.value = false;
 
         this.dataLoaded = true;
