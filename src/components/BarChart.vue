@@ -1,6 +1,6 @@
 <template>
   <div v-if="dataLoaded">
-    <vue-apex-charts type="bar" width="380" :options="chartOptions" :series="series"></vue-apex-charts>
+    <vue-apex-charts type="bar" width="580" :options="chartOptions" :series="series"></vue-apex-charts>
   </div>
   <div v-else>
     <p>Carregando...</p>
@@ -95,6 +95,7 @@ export default {
         },
         fill: {
           opacity: 1,
+          // colors: ['#1267fc', '#f57c00', '#d9d9d9'],
         },
       },
     };
