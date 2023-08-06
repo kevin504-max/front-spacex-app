@@ -7,7 +7,7 @@
                 placeholder="Search here"    
             />
             <div class="search-button">
-                <button class="search-btn" @click="handleSearch">Buscar</button>
+                <button class="search-btn" @click="handleSearch">Search</button>
             </div>
         </div>
     </template>

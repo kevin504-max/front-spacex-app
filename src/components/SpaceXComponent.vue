@@ -5,26 +5,26 @@
         </div>
         <div class="charts">
             <div class="chart">
-                <h2>Lançamentos de foguetes</h2>
+                <h2>Rocket launches</h2>
                 <div class="chart-container">
                     <PieChart v-if="dataLoaded" :launches="launches"></PieChart>
                 </div>
                 <div class="stats">
-                    <h3>Resultados de lançamento:</h3>
+                    <h3>Launches results:</h3>
                     <p>Total: <span class="total">{{ launchesData.total }}</span></p>
-                    <p>Sucesso: <span class="success">{{ launchesData.success }}</span></p>
-                    <p>Falha: <span class="fail">{{ launchesData.failed }}</span></p>
+                    <p>Success: <span class="success">{{ launchesData.success }}</span></p>
+                    <p>Fails: <span class="fail">{{ launchesData.failed }}</span></p>
                 </div>
             </div>
             <div class="chart">
-                <h2>Lançamentos por ano</h2>
+                <h2>Launches by year</h2>
                 <div class="chart-container">
                     <BarChart v-if="dataLoaded" :launchesByYear="launchesByYear" :launches="launches"></BarChart>
                 </div>
             </div>
         </div>
         <div class="header">
-            <h2>Registros de lançamentos</h2>
+            <h2>Posting records</h2>
         </div>
         <div class="search-container">
             <DataFilter
@@ -36,18 +36,18 @@
             <table class="table table-secondary">
                 <thead>
                     <tr>
-                        <th>N° Vôo</th>
-                        <th>Logo</th>
-                        <th>Missão</th>
-                        <th>Data de lançamento</th>
-                        <th>Foguete</th>
+                        <th>Flight No.</th>
+                        <th>Icon</th>
+                        <th>Mission</th>
+                        <th>Release date of</th>
+                        <th>Rocket</th>
                         <th 
                             @click="sortLaunches('success')" 
                             style="cursor: pointer;"
                         >
-                            Resultado <i :class="`fa fa-sort-${sortDirection === 'asc' ? 'up' : 'down'}`"></i>
+                            Result <i :class="`fa fa-sort-${sortDirection === 'asc' ? 'up' : 'down'}`"></i>
                         </th>
-                        <th>Vídeo</th>
+                        <th>Video</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,7 +62,7 @@
                         <td 
                             :class="'mt-3 badge ' + (launch.success ? 'badge-success' : 'badge-danger')" 
                             scope="col" style="font-weight: bold;"
-                        >{{ launch.success ? 'Sucesso' : 'Falha' }}</td>
+                        >{{ launch.success ? 'Sucess' : 'Fail' }}</td>
                         <td class="" scope="col" style="font-weight: bold;">
                             <a :href="`https://www.youtube.com/watch?v=${launch.links.youtube_id}`" target="_blank">
                                 <i class="fab fa-youtube" style="color: #f00; font-size: 2.5rem;"></i>

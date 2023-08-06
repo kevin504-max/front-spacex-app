@@ -3,7 +3,7 @@
     <vue-apex-charts type="bar" width="580" :options="chartOptions" :series="series"></vue-apex-charts>
   </div>
   <div v-else>
-    <p>Carregando...</p>
+    <p>Loading...</p>
   </div>
 </template>
 
