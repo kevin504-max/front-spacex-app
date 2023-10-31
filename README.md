@@ -1,4 +1,7 @@
 # Fullstack 🏅 Space X API
+### Online Project
+The application is running online [here](https://front-spacex-app-hwqs.vercel.app/).
+
 ### 🛠 Technologies Used
 
 The following tools were used in the construction of the project:
