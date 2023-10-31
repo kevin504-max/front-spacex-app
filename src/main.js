@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = 'http://127.0.0.1:3300/api/'
+axios.defaults.baseURL = 'https://backspacex.onrender.com/api/'
 
 new Vue({
   render: h => h(App),
